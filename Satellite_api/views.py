@@ -14,6 +14,8 @@ def home(request):
         form = UploadImageForm(request.POST, request.FILES)
 
         if form.is_valid():
+            form = UploadImageForm(request.POST, request.FILES)
+
             uploaded_image = form.save()
             img_path = uploaded_image.satellite_image.path
             custom_model = CustomModel('VGG16', (224, 224, 3), 4)
@@ -29,7 +31,7 @@ def home(request):
             context = {'form': form, 'uploaded_image': uploaded_image, 'predictions': predicted_labels}
 
             print(uploaded_image.satellite_image.url)
-            return render(request, 'prediction.html', context)
+            return render(request, 'prediction.html',{'form': form})
     else:
         form = UploadImageForm()
-    return render(request, 'index.html', {'form': form})
+    return render(request, 'prediction.html', {'form': form})
